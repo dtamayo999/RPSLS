@@ -90,11 +90,6 @@ void loop(){
 		Serial.print("Computer Score: ");
 		Serial.println(comp_score);
 
-		Serial.println("----");
-		Serial.println(abs(comp_score- user_score));
-		Serial.println((rounds/2)+1);
-		Serial.println("----");
-
 		if(abs(comp_score - user_score) >= (rounds/2) + 1){
 			runing = false;
 		}
@@ -113,6 +108,8 @@ void loop(){
 
 	Serial.print("W/L Ratio = ");
 	Serial.println(Computer.winLosseRatio());
+
+	Serial.println("--- New Round ---");
 }
 
 
