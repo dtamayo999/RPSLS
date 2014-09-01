@@ -99,11 +99,23 @@ void loop(){
 
 	if(comp_score > user_score){
 		Serial.println("Computer Win this Roud!");
-		Computer.victories++;
+		Computer.victories +=1;
+		if(Computer.victories > 254){
+			Computer.victories = 0;
+			Computer.losses = 0;
+			EEPROM.write(11,Computer.losses);
+		}
+		EEPROM.write(10,Computer.victories);
 	}
 	else{
 		Serial.println("User Win this Roud!");
-		Computer.losses++;	
+		Computer.losses += 1;
+		if(Computer.victories > 254){
+			Computer.victories = 0;
+			Computer.losses = 0;
+			EEPROM.write(10,Computer.victories);
+		}
+		EEPROM.write(11,Computer.losses);	
 	}
 
 	Serial.print("W/L Ratio = ");
