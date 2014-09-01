@@ -61,6 +61,8 @@ void loop(){
 	int user_score = 0;
 	bool runing = true;
 
+	uint8_t counter = 0;
+
 	while(runing){
 
 		uint8_t user_inp;
@@ -83,14 +85,55 @@ void loop(){
 		if(result == -1){
 			user_score += 1;
 		}
+		if(result != 0){
+			counter += 1;
+		}
+		
+		uint8_t max_rounds = rounds - (user_score + comp_score);
+		uint8_t min_rounds;
+
+		if(comp_score >= user_score){
+			min_rounds = ((rounds/2) + 1) - comp_score;
+		}
+		else{
+			min_rounds = ((rounds/2) + 1) - user_score;
+		}
+
+
+		Serial.print("Rouds to Finish - Max: ");
+		Serial.print(max_rounds);
+		Serial.print(" Min:  ");
+		Serial.println(min_rounds);
+
 
 		Serial.print("User Score: ");
-		Serial.println(user_score);
+		Serial.print(user_score);
+		Serial.print(" - Chanse to Win: ");
+		if(comp_score > user_score){
+			Serial.print(pow(0.33,max_rounds)*100);
+		}
+		else{
+			Serial.print(pow(0.33,min_rounds)*100);
+		}
+		Serial.println('%');
 
 		Serial.print("Computer Score: ");
-		Serial.println(comp_score);
+		Serial.print(comp_score);
+		Serial.print(" - Chanse to Win: ");
+		
+		if(comp_score >= user_score){
+			Serial.print(pow(0.33,min_rounds)*100);
+		}
+		else{
+			Serial.print(pow(0.33,max_rounds)*100);
+		}
+		Serial.println('%');
+
 
 		if(abs(comp_score - user_score) >= (rounds/2) + 1){
+			runing = false;
+		}
+		if(counter == rounds){
 			runing = false;
 		}
 	}
@@ -323,7 +366,7 @@ bool askMultiplayer(){
 }
 
 uint8_t askRounds(){
-	Serial.println("How many rouds? 1/3/5");
+	Serial.println("How many rouds to Win? 1/3/5");
 	while(true){
 	    if(Serial.available()){
 	    	String inp = readString();
